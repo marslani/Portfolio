@@ -1,0 +1,9 @@
+.app-shell {
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.app-shell__main {
+  min-height: calc(100vh - 10rem);
+}

@@ -1,0 +1,164 @@
+/* =========================================================
+   PREMIUM ELECTRIC NAVBAR STYLES
+   ========================================================= */
+
+:root {
+  --bg-dark: #0a0d14;
+  --nav-bg: rgba(16, 22, 34, 0.75);
+  --nav-border: rgba(255, 255, 255, 0.08);
+  --text-muted: #94a3b8;
+  --text-light: #f8fafc;
+  
+  /* Electric Emerald / Cyan Theme (No Blue) */
+  --electric-accent: #00ffcc;
+  --electric-glow: rgba(0, 255, 204, 0.6);
+  --electric-secondary: #00b386;
+}
+
+/* Base Nav Container */
+.main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--nav-border);
+  border-radius: 100px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
+  max-width: 900px;
+  margin: 1.5rem auto;
+  z-index: 1000;
+}
+
+
+
+/* Nav Links Container */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Link Styling */
+.nav-link {
+  position: relative;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 0.5rem 0.8rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+}
+
+/* Text Glow on Hover */
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--text-light);
+  text-shadow: 0 0 8px var(--electric-glow);
+}
+
+/* Electric Animated Underline & Glow */
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0%;
+  height: 2px;
+  background: var(--electric-accent);
+  box-shadow: 
+    0 0 10px var(--electric-accent),
+    0 0 20px var(--electric-glow);
+  border-radius: 10px;
+  transform: translateX(-50%);
+  transition: width 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Outer Electric Spark Hover Overlay */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: radial-gradient(circle, var(--electric-glow) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.nav-link:hover::before,
+.nav-link:focus-visible::before {
+  width: 85%;
+}
+
+.nav-link:hover::after {
+  opacity: 0.15;
+  transform: scale(1.1);
+}
+
+/* Mobile Toggle Button (Hamburger) */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.5rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN (MOBILE & TABLETS)
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .main-nav {
+    border-radius: 16px;
+    padding: 0.8rem 1.2rem;
+    margin: 1rem;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 120%;
+    left: 0;
+    right: 0;
+    background: rgba(10, 13, 20, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--nav-border);
+    border-radius: 16px;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem 0;
+  }
+}
