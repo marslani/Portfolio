@@ -64,6 +64,11 @@
   text-shadow: 0 0 8px var(--electric-glow);
 }
 
+.nav-link:focus-visible {
+  outline: 2px solid rgba(0, 255, 204, 0.8);
+  outline-offset: 3px;
+}
+
 /* Electric Animated Underline & Glow */
 .nav-link::before {
   content: '';

@@ -66,6 +66,7 @@
 .nav-link:hover,
 .nav-link:focus-visible {
   color: #0f172a;
+  text-decoration: none;
 }
 
 .header-cta,

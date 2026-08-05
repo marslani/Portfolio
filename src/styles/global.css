@@ -26,13 +26,38 @@ img {
 }
 
 button,
+a,
 input,
-textarea {
+textarea,
+select,
+summary,
+[role="button"],
+[role="link"] {
   font: inherit;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  outline: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
 }
 
 button {
   cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible,
+[role="link"]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
 
 a {
