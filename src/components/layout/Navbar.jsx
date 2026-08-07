@@ -5,7 +5,11 @@ const navItems = [
   { label: 'Home', href: '/#top' },
   { label: 'About', href: '/#about' },
   { label: 'Skills', href: '/#skills' },
-  { label: 'Work', href: '/#projects' },
+  { label: 'Workflow', href: '/#workflow' },
+  { label: 'Experience', href: '/#experience' },
+  { label: 'Architecture', href: '/#architecture' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'FAQ', href: '/#faq' },
   { label: 'Contact', href: '/#contact' },
 ];
 

@@ -15,7 +15,11 @@ const navItems = [
   { label: 'Home', href: '/#top', icon: Home, highlight: false },
   { label: 'About', href: '/#about', icon: User, highlight: false },
   { label: 'Skills', href: '/#skills', icon: Cpu, highlight: false },
-  { label: 'Work', href: '/#projects', icon: Briefcase, highlight: false },
+  { label: 'Workflow', href: '/#workflow', icon: Zap, highlight: false },
+  { label: 'Experience', href: '/#experience', icon: Zap, highlight: false },
+  { label: 'Architecture', href: '/#architecture', icon: Zap, highlight: false },
+  { label: 'Projects', href: '/#projects', icon: Briefcase, highlight: false },
+  { label: 'FAQ', href: '/#faq', icon: Zap, highlight: false },
   { label: 'Contact', href: '/#contact', icon: Mail, highlight: true },
 ];
 
