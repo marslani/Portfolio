@@ -760,6 +760,35 @@
   gap: 0.4rem;
 }
 
+/* Mobile-only: stack Projects title above filters and center buttons */
+@media (max-width: 640px) {
+  .projects-section__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .projects-section__top > div {
+    width: 100%;
+  }
+
+  .projects-section__filters {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+  }
+
+  .filter-btn {
+    flex: 0 0 auto;
+  }
+}
+
 .workflow-step__content svg {
   color: var(--color-accent);
 }
