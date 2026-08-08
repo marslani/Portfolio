@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
+  ArrowDown,
   ArrowRight,
   Briefcase,
   CheckCircle2,
@@ -14,332 +15,503 @@ import {
   Rocket,
   Sparkles,
   Users,
+  Smartphone,
+  Monitor,
+  Cpu,
+  Server,
+  Layers
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
-import Button from '../components/common/Button';
-import Card from '../components/common/Card';
-import Modal from '../components/common/Modal';
-import SectionTitle from '../components/common/SectionTitle';
-import FilterTab from '../components/common/FilterTab';
-
-import { projectsData } from '../data/projectsData';
-import { skillsData } from '../data/skillsData';
-import { experienceData } from '../data/experienceData';
-import { faqData } from '../data/faqData';
 import './HomePage.css';
 
-const projectFilterOptions = ['All', 'Web', 'Mobile', 'Desktop'];
-const roles = ['Full Stack Developer', 'React Native Developer', 'Electron.js Developer'];
+/* Data Structures */
+const projectsData = [
+  {
+    id: 1,
+    title: 'Enterprise MERN Web Platform',
+    category: 'Web',
+    accent: '#2563eb',
+    shortDescription: 'High-throughput web dashboard featuring real-time analytics, modular workflows, and unified API layer.',
+    problem: 'The client needed a responsive, performant dashboard capable of handling real-time state updates without heavy page reloads.',
+    approach: 'Engineered a modular React application using Vite, with optimized route-splitting and RESTful query caching.',
+    architecture: 'React (Vite) Single Page App → Express REST API → MongoDB Database System',
+    outcome: 'Improved rendering speeds by 45% and delivered a clean UI pattern across all screen viewports.',
+    stack: ['React', 'Node.js', 'Express', 'MongoDB']
+  },
+  {
+    id: 2,
+    title: 'Cross-Platform Mobile App',
+    category: 'Mobile',
+    accent: '#8b5cf6',
+    shortDescription: 'Unified mobile client for iOS and Android providing real-time data sync and offline support.',
+    problem: 'Duplicate codebases for iOS and Android led to inconsistent feature parity and high maintenance overhead.',
+    approach: 'Built a shared React Native codebase with customized platform primitives and efficient native bridges.',
+    architecture: 'React Native Shared Client → Centralized Data Sync Layer → Express API',
+    outcome: 'Reduced release cycles by 50% while guaranteeing feature parity across both mobile operating systems.',
+    stack: ['React Native', 'JavaScript', 'REST API', 'Redux']
+  },
+  {
+    id: 3,
+    title: 'Desktop Workflow Suite',
+    category: 'Desktop',
+    accent: '#059669',
+    shortDescription: 'Cross-platform desktop tool designed for local file processing and secure system operations.',
+    problem: 'Users required offline-first processing power with direct access to local system resources.',
+    approach: 'Leveraged Electron.js with isolated IPC channels connecting the renderer interface with system processes.',
+    architecture: 'Electron Main Process ← IPC Bridge → React Renderer UI',
+    outcome: 'Shipped a lightweight desktop app operating seamlessly on Windows, macOS, and Linux.',
+    stack: ['Electron.js', 'React', 'Node.js IPC', 'HTML5/CSS3']
+  }
+];
 
-export default function HomePage({ addToast = () => {} }) {
+const skillsData = [
+  {
+    title: 'Frontend Engineering',
+    description: 'Constructing performant, responsive web interfaces.',
+    icon: Code2,
+    skills: [
+      { name: 'React.js / Vite', level: 'Advanced', value: 95 },
+      { name: 'JavaScript (ES6+)', level: 'Advanced', value: 92 },
+      { name: 'HTML5 & Modern CSS3', level: 'Advanced', value: 95 }
+    ]
+  },
+  {
+    title: 'Mobile & Multi-Platform',
+    description: 'Cross-platform mobile and desktop delivery.',
+    icon: Smartphone,
+    skills: [
+      { name: 'React Native', level: 'Proficient', value: 88 },
+      { name: 'Electron.js', level: 'Proficient', value: 85 },
+      { name: 'Cross-Platform UI/UX', level: 'Advanced', value: 90 }
+    ]
+  },
+  {
+    title: 'Backend & Database',
+    description: 'Scalable server architecture and API design.',
+    icon: Server,
+    skills: [
+      { name: 'Node.js / Express.js', level: 'Proficient', value: 88 },
+      { name: 'MongoDB System', level: 'Proficient', value: 85 },
+      { name: 'RESTful API Architecture', level: 'Advanced', value: 92 }
+    ]
+  }
+];
+
+const experienceData = [
+  {
+    period: '2021 — PRESENT',
+    title: 'Senior Full Stack Software Developer',
+    location: 'Remote / Lahore, Pakistan',
+    description: 'Directing cross-platform software delivery for international clients across web, mobile, and desktop ecosystems.',
+    highlights: [
+      'Architected and deployed full-stack React and Node.js solutions serving high-volume client operations.',
+      'Engineered cross-platform mobile apps with React Native, cutting cross-platform overhead.',
+      'Maintained consistent unit test coverage and clean software documentation standards.'
+    ],
+    stack: ['React', 'React Native', 'Node.js', 'MongoDB', 'Electron.js']
+  }
+];
+
+const faqData = [
+  {
+    question: 'What time zones do you support for remote collaboration?',
+    answer: 'I am based in Lahore, Pakistan (PKT, UTC+5) and regularly collaborate with software teams across North America, the UK, Europe, and UAE time zones through async communication and scheduled overlap.'
+  },
+  {
+    question: 'How do you handle cross-platform code maintainability?',
+    answer: 'By keeping core business logic clean and modular in pure JavaScript/TypeScript, client interfaces (React, React Native, Electron) consume unified APIs and state managers smoothly.'
+  },
+  {
+    question: 'Can you build both backend APIs and front-end interfaces?',
+    answer: 'Yes, I deliver complete end-to-end applications — from MongoDB database schemas and Express APIs to responsive React UIs.'
+  }
+];
+
+export default function HomePage() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedProject, setSelectedProject] = useState(null);
   const [openFaq, setOpenFaq] = useState(0);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
+  const [toastMessage, setToastMessage] = useState(null);
 
-  const filteredProjects =
-    activeFilter === 'All'
-      ? projectsData
-      : projectsData.filter((project) => project.category === activeFilter);
+  const filteredProjects = activeFilter === 'All'
+    ? projectsData
+    : projectsData.filter((p) => p.category === activeFilter);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((current) => ({ ...current, [name]: value }));
-    setErrors((current) => ({ ...current, [name]: '' }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const validateForm = () => {
-    const nextErrors = {};
-
-    if (!formData.name.trim()) {
-      nextErrors.name = 'Please enter your name.';
-    }
-    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
-      nextErrors.email = 'Enter a valid email address.';
-    }
-    if (!formData.message.trim() || formData.message.trim().length < 20) {
-      nextErrors.message = 'Message should be at least 20 characters long.';
-    }
-
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
+    const errs = {};
+    if (!formData.name.trim()) errs.name = 'Please state your name.';
+    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) errs.email = 'Enter a valid email address.';
+    if (!formData.message.trim() || formData.message.trim().length < 15) errs.message = 'Please provide a message with at least 15 characters.';
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!validateForm()) {
-      addToast('Please fix the highlighted fields before sending.', 'error');
-      return;
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
 
-    addToast('Your message has been prepared for sending.', 'success');
+    setToastMessage('Message sent successfully!');
     setFormData({ name: '', email: '', message: '' });
-    setErrors({});
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   return (
     <div className="home-page">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          background: '#059669',
+          color: '#fff',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          fontWeight: '600',
+          boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+          zIndex: 2000
+        }}>
+          {toastMessage}
+        </div>
+      )}
+
       {/* Hero Section */}
-      <section className="hero-section" id="top" aria-label="Introduction">
-        <div className="container-shell hero-section__inner">
+      <section className="hero" id="home" aria-label="Introduction">
+        <div className="hero__container">
           <motion.div
-            className="hero-section__content"
-            initial={{ opacity: 0, y: 28 }}
+            className="hero__content"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: 'easeOut' }}
+            transition={{ duration: 0.6 }}
           >
-            <span className="section-eyebrow hero-section__eyebrow">
-              <Sparkles size={14} aria-hidden="true" />
-              Available for global remote work
-            </span>
-
-            <h1 className="hero-section__title">
-              Full Stack Software Developer building practical products for modern teams.
-            </h1>
-
-            <div className="hero-section__role-wrap" aria-live="polite">
-              <span className="hero-section__role-label">I work as</span>
-              <div className="hero-section__role-stack">
-                {roles.map((role, index) => (
-                  <span key={role} className={`hero-section__role hero-section__role--${index}`}>
-                    {role}
-                  </span>
-                ))}
-              </div>
+            <div className="hero__badges">
+              <span className="badge badge--status">
+                <span className="badge__dot"></span>
+                Available for remote roles
+              </span>
+              <span className="badge badge--location">
+                <MapPin size={14} />
+                Lahore, Pakistan <span className="badge__divider">•</span> PKT (UTC+5)
+              </span>
             </div>
 
-            <p className="hero-section__description">
-              I design and build web, mobile, and desktop products with a strong focus on user experience,
-              maintainable code, and business clarity.
+            <div className="hero__header">
+              <span className="hero__greeting">Hello, I am</span>
+              <h1 className="hero__name">Muhammad Arslan</h1>
+              <h2 className="hero__role">
+                I build as a <span className="hero__role-highlight">Full Stack Developer</span>
+              </h2>
+            </div>
+
+            <p className="hero__description">
+              Full Stack Software Developer delivering web, mobile (React Native), and desktop (Electron.js) applications from one JavaScript core — built for performance, accessibility, and maintainability across time zones.
             </p>
 
-            <div className="hero-section__actions">
-              <Button as="a" href="#projects" className="hero-section__cta hero-section__cta--primary">
-                View Projects
-                <ArrowRight size={18} aria-hidden="true" />
-              </Button>
-              <Button as="a" href="/resume.pdf" className="hero-section__cta hero-section__cta--secondary">
-                <Download size={18} aria-hidden="true" />
-                Download Resume
-              </Button>
+            <div className="hero__actions">
+              <a href="#projects" className="btn btn--primary">
+                View Projects <ArrowRight size={18} />
+              </a>
+              <a href="#contact" className="btn btn--secondary">
+                <Download size={18} /> Download Resume
+              </a>
             </div>
-
-            <ul className="hero-section__stats" aria-label="Professional profile statistics">
-              <li>
-                <strong>6+</strong>
-                <span>Years building software</span>
-              </li>
-              <li>
-                <strong>28</strong>
-                <span>Projects delivered</span>
-              </li>
-              <li>
-                <strong>Global</strong>
-                <span>Remote collaboration</span>
-              </li>
-            </ul>
           </motion.div>
 
           <motion.div
-            className="hero-section__card-wrap"
-            initial={{ opacity: 0, scale: 0.96 }}
+            className="hero__media-wrap"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.1 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <Card className="profile-card">
-              <div className="profile-card__topbar">
-                <span className="profile-card__status">Available for work</span>
+            <div className="hero__image-card">
+              <img
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
+                alt="Workspace setup"
+                className="hero__image"
+              />
+              <div className="hero__stack-card">
+                <span className="hero__stack-label">STACK</span>
+                <p className="hero__stack-items">
+                  React <span className="hero__stack-dot">•</span> React Native <span className="hero__stack-dot">•</span> Electron <span className="hero__stack-dot">•</span> Node
+                </p>
               </div>
-              <div className="profile-card__avatar" aria-label="Developer Profile Initial">MA</div>
-              <div className="profile-card__details">
-                <h2>Muhammad Arslan</h2>
-                <p>Full Stack Software Developer</p>
-              </div>
-              <div className="profile-card__meta">
-                <div>
-                  <span>Location</span>
-                  <strong>
-                    <MapPin size={14} aria-hidden="true" />
-                    Lahore, Pakistan
-                  </strong>
-                </div>
-                <div>
-                  <span>Focus</span>
-                  <strong>
-                    <Code2 size={14} aria-hidden="true" />
-                    Web • Mobile • Desktop
-                  </strong>
-                </div>
-              </div>
-            </Card>
+            </div>
           </motion.div>
+        </div>
+
+        <div className="hero__scroll">
+          <span className="hero__scroll-text">SCROLL</span>
+          <ArrowDown size={14} className="hero__scroll-icon" />
         </div>
       </section>
 
       {/* About Section */}
-      <section className="about-section" id="about" aria-labelledby="about-heading">
-        <div className="container-shell about-section__grid">
-          <SectionTitle id="about-heading" eyebrow="About" title="Built for clarity, scale, and real-world product delivery." />
+      <section className="about-section" id="about">
+        <div className="container-shell">
+          <div className="section-header">
+            <span className="section-eyebrow">ABOUT</span>
+            <h2 className="section-title">Engineering clarity across the full stack</h2>
+          </div>
 
-          <div className="about-section__copy">
-            <p>
-              I help teams turn product ideas into dependable digital experiences. My work blends front-end
-              craftsmanship, API logic, and multi-platform thinking so interfaces remain clear while the underlying
-              architecture stays maintainable.
-            </p>
-            <p>
-              I am comfortable working across web, mobile, and desktop products with the same JavaScript-first mindset,
-              which helps teams move faster without sacrificing quality or consistency across platforms.
-            </p>
+          <div className="about-grid">
+            <motion.div
+              className="about-main-card"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <div>
+                <div className="about-main-card__badge">
+                  <Sparkles size={16} />
+                  <span>Full Stack Developer</span>
+                </div>
+                <h3 className="about-main-card__title">
+                  I build software the way good systems are designed — modular, well-documented, and easy to extend.
+                </h3>
+                <p className="about-main-card__text">
+                  My focus is cross-platform delivery: shipping web, mobile, and desktop products from one consistent JavaScript foundation. Based in Lahore, Pakistan, I collaborate seamlessly with international engineering teams.
+                </p>
+              </div>
+
+              <div className="about-highlights-pills">
+                <span className="about-pill"><CheckCircle2 size={14} /> Modular Engineering</span>
+                <span className="about-pill"><CheckCircle2 size={14} /> Cross-Platform Parity</span>
+                <span className="about-pill"><CheckCircle2 size={14} /> Async Communication</span>
+              </div>
+            </motion.div>
+
+            <div className="about-cards-column">
+              <motion.div className="about-feature-card" whileHover={{ y: -4 }}>
+                <div className="about-feature-card__icon about-feature-card__icon--web">
+                  <Globe size={22} />
+                </div>
+                <div>
+                  <h4>Web (React / Vite)</h4>
+                  <p>Fast, single-page web applications built with clean component state and responsive layouts.</p>
+                </div>
+              </motion.div>
+
+              <motion.div className="about-feature-card" whileHover={{ y: -4 }}>
+                <div className="about-feature-card__icon about-feature-card__icon--mobile">
+                  <Smartphone size={22} />
+                </div>
+                <div>
+                  <h4>Mobile (React Native)</h4>
+                  <p>Native iOS and Android client applications delivered from a single JavaScript codebase.</p>
+                </div>
+              </motion.div>
+
+              <motion.div className="about-feature-card" whileHover={{ y: -4 }}>
+                <div className="about-feature-card__icon about-feature-card__icon--desktop">
+                  <Monitor size={22} />
+                </div>
+                <div>
+                  <h4>Desktop (Electron.js)</h4>
+                  <p>Cross-platform desktop tools with native operating system integrations and local file access.</p>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Skills Section */}
-      <section className="skills-section" id="skills" aria-labelledby="skills-heading">
+      <section className="skills-section" id="skills">
         <div className="container-shell">
-          <SectionTitle id="skills-heading" eyebrow="Skills" title="Tools and systems that support product work from idea to release." align="center" />
+          <div className="section-header">
+            <span className="section-eyebrow">SKILLS</span>
+            <h2 className="section-title">A focused, honest tech stack</h2>
+            <p style={{ color: 'var(--color-muted)', marginTop: '0.5rem' }}>
+              Proficiency levels reflect real working depth — not inflated claims. Tiers: Advanced, Proficient, and Working Knowledge.
+            </p>
+          </div>
 
           <div className="skills-grid">
-            {skillsData.map(({ title, description, icon: Icon, skills }) => (
-              <Card key={title} className="skill-card">
-                <div className="skill-card__header">
-                  <span className="icon-badge"><Icon size={18} aria-hidden="true" /></span>
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{description}</p>
-                  </div>
-                </div>
-
-                <div className="skill-card__list">
-                  {skills.map((skill) => (
-                    <div key={skill.name} className="skill-card__item">
-                      <div className="skill-card__label-row">
-                        <span>{skill.name}</span>
-                        <span>{skill.level}</span>
-                      </div>
-                      <div className="skill-card__meter" aria-label={`${skill.name} proficiency ${skill.value}%`}>
-                        <span style={{ width: `${skill.value}%` }} />
-                      </div>
+            {skillsData.map((group, idx) => {
+              const IconComp = group.icon;
+              return (
+                <motion.div
+                  key={group.title}
+                  className="skill-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                >
+                  <div className="skill-card__header">
+                    <span className="icon-badge"><IconComp size={20} /></span>
+                    <div>
+                      <h3>{group.title}</h3>
+                      <p>{group.description}</p>
                     </div>
-                  ))}
-                </div>
-              </Card>
-            ))}
+                  </div>
+
+                  <div className="skill-card__list">
+                    {group.skills.map((s) => (
+                      <div key={s.name}>
+                        <div className="skill-card__label-row">
+                          <span className="skill-name">{s.name}</span>
+                          <span className="skill-level">{s.level}</span>
+                        </div>
+                        <div className="skill-card__meter">
+                          <motion.span
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${s.value}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease: 'easeOut' }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Architecture Section */}
-      <section className="architecture-section" id="architecture" aria-labelledby="architecture-heading">
+      <section className="architecture-section" id="architecture">
         <div className="container-shell">
-          <SectionTitle id="architecture-heading" eyebrow="Architecture" title="System patterns shaped for maintainable product delivery." />
+          <div className="section-header">
+            <span className="section-eyebrow">ARCHITECTURE</span>
+            <h2 className="section-title">System design, not just code</h2>
+            <p style={{ color: 'var(--color-muted)', marginTop: '0.5rem' }}>
+              Representative architecture patterns across the web, mobile, and desktop stacks I work with.
+            </p>
+          </div>
 
           <div className="architecture-layout">
-            <Card className="architecture-card">
-              <h3>Web product architecture</h3>
-              <div className="diagram diagram--web">
-                <div className="diagram__layer diagram__layer--ui">React + Vite UI</div>
-                <div className="diagram__line" aria-hidden="true" />
-                <div className="diagram__layer diagram__layer--api">Express API</div>
-                <div className="diagram__line" aria-hidden="true" />
-                <div className="diagram__layer diagram__layer--data">MongoDB</div>
+            <div className="architecture-card">
+              <h3>Web Application Stack</h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--color-muted)', margin: '0.4rem 0 1rem' }}>
+                React (Vite) single-page application communicating with an Express REST API backed by MongoDB.
+              </p>
+              <div className="diagram">
+                <div className="diagram__layer">React (Vite) SPA</div>
+                <div className="diagram__line" />
+                <div className="diagram__layer">REST API — Express</div>
+                <div className="diagram__line" />
+                <div className="diagram__layer">MongoDB Database System</div>
               </div>
-            </Card>
-
-            <Card className="architecture-card">
-              <h3>Mobile product architecture</h3>
-              <div className="diagram diagram--mobile">
-                <div className="diagram__layer diagram__layer--shared">Shared React Native codebase</div>
-                <div className="diagram__line" aria-hidden="true" />
-                <div className="diagram__layer diagram__layer--device">iOS / Android clients</div>
-                <div className="diagram__line" aria-hidden="true" />
-                <div className="diagram__layer diagram__layer--sync">API + data sync</div>
-              </div>
-            </Card>
-
-            <Card className="architecture-card">
-              <h3>Desktop product architecture</h3>
-              <div className="diagram diagram--desktop">
-                <div className="diagram__layer diagram__layer--main">Electron main process</div>
-                <div className="diagram__line" aria-hidden="true" />
-                <div className="diagram__layer diagram__layer--render">Renderer UI</div>
-                <div className="diagram__line" aria-hidden="true" />
-                <div className="diagram__layer diagram__layer--local">Local + remote data access</div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section className="projects-section" id="projects" aria-labelledby="projects-heading">
-        <div className="container-shell">
-          <div className="projects-section__top">
-            <SectionTitle id="projects-heading" eyebrow="Projects" title="Selected work across product, mobile, and desktop experiences." />
-
-            <div className="projects-section__filters" role="tablist" aria-label="Project filters">
-              {projectFilterOptions.map((option) => (
-                <FilterTab
-                  key={option}
-                  label={option}
-                  active={activeFilter === option}
-                  onClick={() => setActiveFilter(option)}
-                />
-              ))}
             </div>
-          </div>
 
-          <div className="projects-grid">
-            {filteredProjects.map((project) => (
-              <Card key={project.title} className="project-card" onClick={() => setSelectedProject(project)}>
-                <div className="project-card__header">
-                  <span className="project-card__tag" style={{ background: `${project.accent}1A`, color: project.accent }}>
-                    {project.category}
-                  </span>
-                  <span className="project-card__icon"><Code2 size={16} aria-hidden="true" /></span>
-                </div>
-                <h3>{project.title}</h3>
-                <p>{project.shortDescription}</p>
-                <div className="project-card__tags">
-                  {project.stack.slice(0, 3).map((item) => (
-                    <span key={item}>{item}</span>
-                  ))}
-                </div>
-                <div className="project-card__footer">
-                  <span>View case study</span>
-                  <ArrowRight size={16} aria-hidden="true" />
-                </div>
-              </Card>
-            ))}
+            <div className="architecture-card">
+              <h3>Cross-Platform Mobile Stack</h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--color-muted)', margin: '0.4rem 0 1rem' }}>
+                React Native application compiling down to native iOS and Android components.
+              </p>
+              <div className="diagram">
+                <div className="diagram__layer">React Native App Codebase</div>
+                <div className="diagram__line" />
+                <div className="diagram__layer">Native Bridge (iOS / Android)</div>
+                <div className="diagram__line" />
+                <div className="diagram__layer">REST API Sync Backend</div>
+              </div>
+            </div>
+
+            <div className="architecture-card">
+              <h3>Desktop Application Stack</h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--color-muted)', margin: '0.4rem 0 1rem' }}>
+                Electron desktop application isolating the Node main process from the UI renderer.
+              </p>
+              <div className="diagram">
+                <div className="diagram__layer">Electron Main Process (Node)</div>
+                <div className="diagram__line" />
+                <div className="diagram__layer">Secure IPC Channel</div>
+                <div className="diagram__line" />
+                <div className="diagram__layer">React Renderer UI</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Workflow Section */}
-      <section className="workflow-section" id="workflow" aria-labelledby="workflow-heading">
+      <section className="workflow-section" id="workflow">
         <div className="container-shell">
-          <SectionTitle id="workflow-heading" eyebrow="Workflow" title="A repeatable system for building what matters without unnecessary overhead." />
+          <div className="section-header">
+            <span className="section-eyebrow">WORKFLOW</span>
+            <h2 className="section-title">Clear, predictable engineering process</h2>
+          </div>
 
           <div className="workflow-timeline">
             {[
-              { icon: Users, title: 'Discovery', detail: 'Clarify goals, assumptions, scope, and delivery expectations early.' },
-              { icon: Globe, title: 'Architecture', detail: 'Map the app structure, data flow, and platform decisions before build starts.' },
-              { icon: Rocket, title: 'Iterative build', detail: 'Ship in focused milestones with version control and practical review loops.' },
-              { icon: CheckCircle2, title: 'Verification', detail: 'Test functionality, usability, and release readiness with clear quality checks.' },
-              { icon: Database, title: 'Launch', detail: 'Deploy to Vercel, Netlify, or Railway with a clean, monitored release path.' },
-              { icon: MonitorSmartphone, title: 'Growth', detail: 'Review real usage, refine the product, and support ongoing iteration.' },
-            ].map(({ icon: Icon, title, detail }, index) => (
-              <div key={title} className="workflow-step">
-                <div className="workflow-step__marker">
-                  <span>{index + 1}</span>
+              { icon: Users, title: 'Requirement Discovery', detail: 'Aligning on project goals, data models, and platform boundaries before writing code.' },
+              { icon: Globe, title: 'System Architecture', detail: 'Designing clean API schemas, state flow, and modular folder structures.' },
+              { icon: Rocket, title: 'Agile Implementation', detail: 'Building features iteratively with frequent Git commits and milestone demos.' },
+              { icon: CheckCircle2, title: 'Testing & Optimization', detail: 'Conducting performance tuning, responsive design validation, and error handling checks.' },
+              { icon: Database, title: 'Production Deployment', detail: 'Deploying services with clean environment variables and automated pipelines.' },
+              { icon: MonitorSmartphone, title: 'Iterative Support', detail: 'Monitoring real-world usability and maintaining cross-platform dependencies.' }
+            ].map((step, idx) => {
+              const StepIcon = step.icon;
+              return (
+                <div key={step.title} className="workflow-step">
+                  <div className="workflow-step__marker">{idx + 1}</div>
+                  <div className="workflow-step__content">
+                    <StepIcon size={20} />
+                    <h3>{step.title}</h3>
+                    <p>{step.detail}</p>
+                  </div>
                 </div>
-                <div className="workflow-step__content">
-                  <Icon size={18} aria-hidden="true" />
-                  <h3>{title}</h3>
-                  <p>{detail}</p>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section className="projects-section" id="projects">
+        <div className="container-shell">
+          <div className="projects-section__top">
+            <div>
+              <span className="section-eyebrow">PROJECTS</span>
+              <h2 className="section-title">Selected software projects</h2>
+            </div>
+
+            <div className="projects-section__filters">
+              {['All', 'Web', 'Mobile', 'Desktop'].map((cat) => (
+                <button
+                  key={cat}
+                  className={`filter-btn ${activeFilter === cat ? 'filter-btn--active' : ''}`}
+                  onClick={() => setActiveFilter(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="projects-grid">
+            {filteredProjects.map((p) => (
+              <div
+                key={p.id}
+                className="project-card"
+                onClick={() => setSelectedProject(p)}
+              >
+                <div className="project-card__header">
+                  <span className="project-card__tag" style={{ background: `${p.accent}1A`, color: p.accent }}>
+                    {p.category}
+                  </span>
+                  <span className="project-card__icon"><Code2 size={16} /></span>
+                </div>
+                <h3>{p.title}</h3>
+                <p>{p.shortDescription}</p>
+                <div className="project-card__tags">
+                  {p.stack.map((item) => <span key={item}>{item}</span>)}
+                </div>
+                <div className="project-card__footer">
+                  <span>View case study</span>
+                  <ArrowRight size={16} />
                 </div>
               </div>
             ))}
@@ -348,76 +520,77 @@ export default function HomePage({ addToast = () => {} }) {
       </section>
 
       {/* Experience Section */}
-      <section className="experience-section" id="experience" aria-labelledby="experience-heading">
+      <section className="experience-section" id="experience">
         <div className="container-shell">
-          <SectionTitle id="experience-heading" eyebrow="Experience" title="Product-focused engineering experience shaped around real delivery work." />
+          <div className="section-header">
+            <span className="section-eyebrow">EXPERIENCE</span>
+            <h2 className="section-title">Professional software history</h2>
+          </div>
 
           <div className="experience-list">
-            {experienceData.map((item) => (
-              <Card key={item.period} className="experience-item">
-                <div className="experience-item__meta">
-                  <span>{item.period}</span>
-                </div>
+            {experienceData.map((exp) => (
+              <div key={exp.title} className="experience-item">
+                <div className="experience-item__meta">{exp.period}</div>
                 <div className="experience-item__content">
                   <div className="experience-item__heading">
-                    <Briefcase size={16} aria-hidden="true" />
-                    <h3>{item.title}</h3>
+                    <Briefcase size={18} style={{ color: 'var(--color-blue)' }} />
+                    <h3>{exp.title}</h3>
                   </div>
-                  <p className="experience-item__location">{item.location}</p>
-                  <p>{item.description}</p>
+                  <p className="experience-item__location">{exp.location}</p>
+                  <p>{exp.description}</p>
                   <ul>
-                    {item.highlights.map((highlight) => (
-                      <li key={highlight}>{highlight}</li>
-                    ))}
+                    {exp.highlights.map((h, i) => <li key={i}>{h}</li>)}
                   </ul>
                   <div className="experience-item__tags">
-                    {item.stack.map((tech) => (
-                      <span key={tech}>{tech}</span>
-                    ))}
+                    {exp.stack.map((t) => <span key={t}>{t}</span>)}
                   </div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Resume Callout Section */}
-      <section className="resume-section" id="resume" aria-labelledby="resume-heading">
-        <div className="container-shell resume-section__inner">
-          <div>
-            <SectionTitle id="resume-heading" eyebrow="Resume" title="A concise overview of the work and value I bring to product teams." />
-            <p className="resume-section__copy">
-              I build reliable digital products with a strong emphasis on maintainability, accessibility, and clear cross-platform execution.
-            </p>
+      {/* Resume Section */}
+      <section className="resume-section" id="resume">
+        <div className="container-shell">
+          <div className="resume-section__inner">
+            <div>
+              <span className="section-eyebrow">RESUME</span>
+              <h2 className="section-title" style={{ fontSize: '1.8rem' }}>Ready to review my complete history?</h2>
+              <p className="resume-section__copy">
+                Download a clean, one-page summary of technical projects, software engineering capabilities, and architectural practices.
+              </p>
+            </div>
+            <a href="#contact" className="btn btn--primary" style={{ whiteSpace: 'nowrap' }}>
+              <Download size={18} /> Download PDF Resume
+            </a>
           </div>
-          <Button as="a" href="/resume.pdf" className="resume-section__button">
-            <Download size={18} aria-hidden="true" />
-            Download Resume (PDF)
-          </Button>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="faq-section" id="faq" aria-labelledby="faq-heading">
+      <section className="faq-section" id="faq">
         <div className="container-shell">
-          <SectionTitle id="faq-heading" eyebrow="FAQ" title="Questions teams often ask before starting a project." align="center" />
+          <div className="section-header" style={{ textAlign: 'center' }}>
+            <span className="section-eyebrow">FAQ</span>
+            <h2 className="section-title">Frequently asked questions</h2>
+          </div>
 
           <div className="faq-list">
             {faqData.map((item, index) => {
               const isOpen = openFaq === index;
               return (
-                <div key={item.question} className={`faq-item ${isOpen ? 'faq-item--open' : ''}`}>
+                <div key={index} className={`faq-item ${isOpen ? 'faq-item--open' : ''}`}>
                   <button
                     type="button"
                     className="faq-item__button"
                     onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                    aria-expanded={isOpen}
                   >
                     <span>{item.question}</span>
-                    <span className="faq-item__toggle" aria-hidden="true">{isOpen ? '−' : '+'}</span>
+                    <span className="faq-item__toggle">{isOpen ? '−' : '+'}</span>
                   </button>
-                  {isOpen ? <p className="faq-item__answer">{item.answer}</p> : null}
+                  {isOpen && <p className="faq-item__answer">{item.answer}</p>}
                 </div>
               );
             })}
@@ -426,27 +599,29 @@ export default function HomePage({ addToast = () => {} }) {
       </section>
 
       {/* Contact Section */}
-      <section className="contact-section" id="contact" aria-labelledby="contact-heading">
+      <section className="contact-section" id="contact">
         <div className="container-shell contact-section__inner">
-          <div className="contact-section__content">
-            <SectionTitle id="contact-heading" eyebrow="Contact" title="Let’s build product experiences that feel clean, fast, and dependable." />
-            <div className="contact-links" aria-label="Contact channels">
+          <div>
+            <span className="section-eyebrow">CONTACT</span>
+            <h2 className="section-title">Let's discuss your project</h2>
+            <p style={{ color: 'var(--color-text-soft)', marginTop: '0.8rem', lineHeight: '1.6' }}>
+              Available for full-stack engineering roles, cross-platform app delivery, and remote technical consulting.
+            </p>
+
+            <div className="contact-links">
               <a href="mailto:muhammadarslan.dev@gmail.com">
-                <Mail size={16} aria-hidden="true" />
-                muhammadarslan.dev@gmail.com
+                <Mail size={18} /> muhammadarslan.dev@gmail.com
               </a>
               <a href="https://github.com" target="_blank" rel="noreferrer">
-                <Globe size={16} aria-hidden="true" />
-                GitHub Profile
+                <Globe size={18} /> GitHub Profile
               </a>
-              <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">
-                <Globe size={16} aria-hidden="true" />
-                LinkedIn Profile
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer">
+                <Globe size={18} /> LinkedIn Profile
               </a>
             </div>
           </div>
 
-          <form className="contact-form" onSubmit={handleSubmit} noValidate aria-label="Contact form">
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
             <div className="contact-form__field">
               <label htmlFor="name">Name</label>
               <input
@@ -454,10 +629,9 @@ export default function HomePage({ addToast = () => {} }) {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                aria-invalid={Boolean(errors.name)}
-                aria-describedby={errors.name ? 'name-error' : undefined}
+                placeholder="Your Name"
               />
-              {errors.name ? <small id="name-error">{errors.name}</small> : null}
+              {errors.name && <small>{errors.name}</small>}
             </div>
 
             <div className="contact-form__field">
@@ -468,10 +642,9 @@ export default function HomePage({ addToast = () => {} }) {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                aria-invalid={Boolean(errors.email)}
-                aria-describedby={errors.email ? 'email-error' : undefined}
+                placeholder="name@example.com"
               />
-              {errors.email ? <small id="email-error">{errors.email}</small> : null}
+              {errors.email && <small>{errors.email}</small>}
             </div>
 
             <div className="contact-form__field">
@@ -482,51 +655,65 @@ export default function HomePage({ addToast = () => {} }) {
                 rows="5"
                 value={formData.message}
                 onChange={handleChange}
-                aria-invalid={Boolean(errors.message)}
-                aria-describedby={errors.message ? 'message-error' : undefined}
+                placeholder="Tell me about your project or open position..."
               />
-              {errors.message ? <small id="message-error">{errors.message}</small> : null}
+              {errors.message && <small>{errors.message}</small>}
             </div>
 
-            <Button type="submit" className="contact-form__submit">Send Message</Button>
+            <button type="submit" className="btn btn--primary" style={{ justifySelf: 'start' }}>
+              Send Message <ArrowRight size={18} />
+            </button>
           </form>
         </div>
       </section>
 
-      {/* Case Study Modal */}
-      <Modal isOpen={Boolean(selectedProject)} onClose={() => setSelectedProject(null)} title={selectedProject?.title || ''}>
-        {selectedProject ? (
-          <div className="case-study-modal">
-            <p className="case-study-modal__summary">{selectedProject.shortDescription}</p>
-            <div className="case-study-modal__group">
-              <h4>Problem</h4>
-              <p>{selectedProject.problem}</p>
-            </div>
-            <div className="case-study-modal__group">
-              <h4>Approach</h4>
-              <p>{selectedProject.approach}</p>
-            </div>
-            <div className="case-study-modal__group">
-              <h4>Architecture</h4>
-              <p>{selectedProject.architecture}</p>
-            </div>
-            <div className="case-study-modal__group">
-              <h4>Outcome</h4>
-              <p>{selectedProject.outcome}</p>
-            </div>
-            <div className="case-study-modal__tags">
-              {selectedProject.stack.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </Modal>
+      {/* Modal View */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
+            <motion.div
+              className="modal-card"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 700 }}>{selectedProject.title}</h3>
+                <button className="modal-close" onClick={() => setSelectedProject(null)}>&times;</button>
+              </div>
 
-      {/* Footer Legal Links */}
-      <footer className="container-shell">
-        <Link to="/privacy-policy" className="home-page__legal-link">Privacy Policy</Link>
-        <Link to="/terms" className="home-page__legal-link home-page__legal-link--secondary">Terms of Service</Link>
+              <div className="case-study-modal">
+                <p className="case-study-modal__summary">{selectedProject.shortDescription}</p>
+                <div className="case-study-modal__group">
+                  <h4>Problem Statement</h4>
+                  <p>{selectedProject.problem}</p>
+                </div>
+                <div className="case-study-modal__group">
+                  <h4>Engineering Approach</h4>
+                  <p>{selectedProject.approach}</p>
+                </div>
+                <div className="case-study-modal__group">
+                  <h4>System Architecture</h4>
+                  <p>{selectedProject.architecture}</p>
+                </div>
+                <div className="case-study-modal__group">
+                  <h4>Key Outcome</h4>
+                  <p>{selectedProject.outcome}</p>
+                </div>
+                <div className="case-study-modal__tags">
+                  {selectedProject.stack.map((s) => <span key={s}>{s}</span>)}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Footer */}
+      <footer className="container-shell footer-container">
+        <a href="#home" className="home-page__legal-link">Privacy Policy</a>
+        <a href="#home" className="home-page__legal-link">Terms of Service</a>
       </footer>
     </div>
   );
