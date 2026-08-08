@@ -124,3 +124,21 @@ section[id] {
     scroll-margin-top: 8rem; /* slightly larger for mobile header and menu */
   }
 }
+
+/* Subtle divider line at the bottom of every section */
+section {
+  position: relative;
+  padding-bottom: 2rem; /* space for the divider so content doesn't overlap */
+  margin-bottom: 2rem;
+}
+
+section::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+  opacity: 0.9;
+}
