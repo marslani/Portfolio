@@ -11,9 +11,9 @@ export const NAV_ITEMS = [
 ];
 
 export const SOCIAL_LINKS = [
-  { label: 'Email', href: 'mailto:muhammadarslan.dev@gmail.com' },
-  { label: 'GitHub', href: 'https://github.com/' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
+  { label: 'Email', href: 'mailto:muhammadarslanm011@gmail.com' },
+  { label: 'GitHub', href: 'https://github.com/marslani' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/muhammmad-arslan/' },
 ];
 
 export const SITE_META = {

@@ -89,3 +89,36 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+/* Section highlight used for animated focus when navigating from header */
+.section-highlight {
+  animation: sectionPulse 1.6s ease-in-out 0s 1;
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.14) inset, 0 0 18px rgba(37, 99, 235, 0.06);
+  border-radius: 10px;
+}
+
+@keyframes sectionPulse {
+  0% {
+    background: linear-gradient(90deg, rgba(37,99,235,0.06), rgba(124,58,237,0.03));
+    transform: translateY(0);
+  }
+  40% {
+    background: linear-gradient(90deg, rgba(37,99,235,0.12), rgba(124,58,237,0.06));
+    transform: translateY(-4px);
+  }
+  100% {
+    background: transparent;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure anchored sections are not hidden behind the sticky header */
+section[id] {
+  scroll-margin-top: 5rem; /* matches header min-height */
+}
+
+@media (max-width: 720px) {
+  section[id] {
+    scroll-margin-top: 8rem; /* slightly larger for mobile header and menu */
+  }
+}

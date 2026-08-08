@@ -25,7 +25,7 @@ export default function PrivacyPolicyPage() {
       </p>
       <h2>Contact</h2>
       <p>
-        If you have questions about this policy, contact muhammadarslan.dev@gmail.com.
+        If you have questions about this policy, contact muhammadarslanm011@gmail.com.
       </p>
     </main>
   );

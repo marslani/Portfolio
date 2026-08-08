@@ -20,10 +20,12 @@ import {
   X,
   Cpu,
   Server,
-  Layers
+  Layers,
+  Phone
 } from 'lucide-react';
 
 import './HomePage.css';
+import { experienceData } from '../data/experienceData';
 
 /* Data Structures */
 const projectsData = [
@@ -119,39 +121,43 @@ const skillsData = [
   }
 ];
 
-const experienceData = [
-  {
-    period: '2021 — PRESENT',
-    title: 'Senior Full Stack Software Developer',
-    location: 'Remote / Lahore, Pakistan',
-    description: 'Directing cross-platform software delivery for international clients across web, mobile, and desktop ecosystems.',
-    highlights: [
-      'Architected and deployed full-stack React and Node.js solutions serving high-volume client operations.',
-      'Engineered cross-platform mobile apps with React Native, cutting cross-platform overhead.',
-      'Maintained consistent unit test coverage and clean software documentation standards.'
-    ],
-    stack: ['React', 'React Native', 'Node.js', 'MongoDB', 'Electron.js']
-  }
-];
-
 const faqData = [
   {
-    question: 'What time zones do you support for remote collaboration?',
-    answer: 'I am based in Lahore, Pakistan (PKT, UTC+5) and regularly collaborate with software teams across North America, the UK, Europe, and UAE time zones through async communication and scheduled overlap.'
+    question: 'What core technologies and platforms do you specialize in?',
+    answer:
+      'I offer cross-platform development across three main domains using a unified JavaScript/TypeScript ecosystem: Web Development with React & Vite, Desktop Software with Electron.js & React, and Mobile App Development with React Native.',
   },
   {
-    question: 'How do you handle cross-platform code maintainability?',
-    answer: 'By keeping core business logic clean and modular in pure JavaScript/TypeScript, client interfaces (React, React Native, Electron) consume unified APIs and state managers smoothly.'
+    question: 'Can you deliver full-stack solutions from database to UI?',
+    answer:
+      'Yes. I build complete end-to-end applications that cover MongoDB database schemas, secure Express/Node.js REST APIs, and responsive user interfaces on web, mobile, and desktop.',
   },
   {
-    question: 'Can you build both backend APIs and front-end interfaces?',
-    answer: 'Yes, I deliver complete end-to-end applications — from MongoDB database schemas and Express APIs to responsive React UIs.'
+    question: 'How do you maintain code quality across Web, Desktop, and Mobile platforms?',
+    answer:
+      'I use a modular, clean-code approach. Core business logic, API integrations, and state management are separated into reusable modules so React, Electron, and React Native apps remain consistent and performant.',
+  },
+  {
+    question: 'What is your process for managing remote projects and team collaboration?',
+    answer:
+      'I use asynchronous workflows with scheduled syncs. GitHub, Jira, and Notion handle planning, Slack and Discord support real-time updates, and video calls ensure milestone reviews stay aligned.',
+  },
+  {
+    question: 'What engagement models do you offer for new projects?',
+    answer:
+      'I am available for freelance projects, contract engagements, and full-time remote roles. I adapt to your team’s roadmap for MVP delivery, cross-platform deployment, or ongoing feature development.',
+  },
+  {
+    question: 'How do you ensure high performance and fast load times in React apps?',
+    answer:
+      'Performance starts from day one with Vite, code-splitting, lazy loading, lightweight state, and optimized asset delivery to support smooth 60fps experiences across web, desktop, and mobile.',
   }
 ];
 
 export default function HomePage() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedExperience, setSelectedExperience] = useState(null);
   const [openFaq, setOpenFaq] = useState(0);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
@@ -550,75 +556,84 @@ export default function HomePage() {
           </div>
 
           <div className="experience-list">
-            <div className="experience-item">
-              <div className="experience-item__meta">2023 — Present</div>
-              <div className="experience-item__content">
-                <div className="experience-item__heading">
-                  <h3>Freelance Full Stack Developer</h3>
-                </div>
-                <p className="experience-item__location">Remote · Lahore, Pakistan</p>
-                <p>
-                  Building product interfaces and platform logic for startups and small teams seeking web, mobile, and desktop delivery from a shared JavaScript skill set.
-                </p>
-                <ul>
-                  <li>Developed responsive web applications with React and Vite for product discovery and operational workflows.</li>
-                  <li>Built mobile features for recurring task flows, sync patterns, and cross-platform consistency in React Native projects.</li>
-                  <li>Designed desktop interfaces with Electron.js to support internal workflows and business operations.</li>
-                </ul>
-                <div className="experience-item__tags">
-                  {['React', 'Node.js', 'MongoDB', 'Express', 'React Native', 'Electron.js'].map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="experience-item">
-              <div className="experience-item__meta">2021 — 2023</div>
-              <div className="experience-item__content">
-                <div className="experience-item__heading">
-                  <h3>Independent Product Engineer</h3>
-                </div>
-                <p className="experience-item__location">Remote · Global Collaboration</p>
-                <p>
-                  Worked on feature delivery for client-facing products, focusing on front-end architecture, modular components, and API-backed workflows.
-                </p>
-                <ul>
-                  <li>Created maintainable UI systems and reusable component patterns to support product growth without repeated implementation work.</li>
-                  <li>Connected front-end product flows to REST APIs and MongoDB-backed data models for operational and customer-facing features.</li>
-                  <li>Improved development speed by clarifying architecture decisions and reducing handoff friction between design and delivery.</li>
-                </ul>
-                <div className="experience-item__tags">
-                  {['JavaScript', 'React', 'Express', 'MongoDB', 'Git', 'Vite'].map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
+            {experienceData.map((item) => (
+              <div key={item.title} className="experience-item">
+                <div className="experience-item__meta">{item.period}</div>
+                <div className="experience-item__content">
+                  <div className="experience-item__heading">
+                    <h3>{item.title}</h3>
+                  </div>
+                  <p className="experience-item__location">{item.location}</p>
+                  <p className="experience-item__preview">{item.description}</p>
+                  <div className="experience-item__actions">
+                    <button
+                      type="button"
+                      className="experience-item__view-more"
+                      onClick={() => setSelectedExperience(item)}
+                    >
+                      View more
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="experience-item">
-              <div className="experience-item__meta">2019 — 2021</div>
-              <div className="experience-item__content">
-                <div className="experience-item__heading">
-                  <h3>Front-end Developer</h3>
-                </div>
-                <p className="experience-item__location">Hybrid / Remote Projects</p>
-                <p>
-                  Delivered interface work and product iteration for business tools, portfolio sites, and utility-driven applications with a strong focus on clarity and responsiveness.
-                </p>
-                <ul>
-                  <li>Built interface components and product screens tailored to business workflows and customer journeys.</li>
-                  <li>Handled front-end performance and accessibility improvements to support smoother interactions and code maintainability.</li>
-                  <li>Worked closely with product requirements to convert business needs into structured, testable UI features.</li>
-                </ul>
-                <div className="experience-item__tags">
-                  {['HTML5', 'CSS3', 'JavaScript', 'React', 'Git'].map((tag) => (
-                    <span key={tag}>{tag}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
+
+          <AnimatePresence>
+            {selectedExperience && (
+              <div className="modal-overlay" onClick={() => setSelectedExperience(null)}>
+                <motion.div
+                  className="modal-card"
+                  variants={{
+                    hidden: { opacity: 0, y: 24, scale: 0.98, rotate: -0.8 },
+                    visible: { opacity: 1, y: 0, scale: 1, rotate: 0 },
+                    exit: { opacity: 0, y: 24, scale: 0.98, rotate: -0.8 }
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="modal-header">
+                    <div>
+                      <h3 style={{ fontSize: '1.4rem', fontWeight: 700 }}>{selectedExperience.title}</h3>
+                      <p className="experience-modal__meta">{selectedExperience.period} · {selectedExperience.location}</p>
+                    </div>
+                    <button className="modal-close" onClick={() => setSelectedExperience(null)} aria-label="Close">
+                      <X size={18} />
+                    </button>
+                  </div>
+
+                  <motion.div className="experience-modal" initial="hidden" animate="visible" exit="hidden"
+                    variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } } }}
+                  >
+                    <motion.p className="experience-modal__description" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
+                      {selectedExperience.description}
+                    </motion.p>
+
+                    <motion.div className="experience-modal__group" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
+                      <h4>Highlights</h4>
+                      <ul>
+                        {selectedExperience.highlights.map((highlight) => (
+                          <li key={highlight}>{highlight}</li>
+                        ))}
+                      </ul>
+                    </motion.div>
+
+                    <motion.div className="experience-modal__group" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
+                      <h4>Tech Stack</h4>
+                      <div className="experience-modal__tags">
+                        {selectedExperience.stack.map((stack) => (
+                          <span key={stack}>{stack}</span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
@@ -641,18 +656,32 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="faq-section" id="faq">
+      <motion.section
+        className="faq-section"
+        id="faq"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
         <div className="container-shell">
           <div className="section-header" style={{ textAlign: 'center' }}>
             <span className="section-eyebrow">FAQ</span>
             <h2 className="section-title">Frequently asked questions</h2>
+            <p className="faq-section__intro">
+              Answers crafted for Web, Mobile, and Desktop development clients who want polished delivery and clear communication.
+            </p>
           </div>
 
           <div className="faq-list">
             {faqData.map((item, index) => {
               const isOpen = openFaq === index;
               return (
-                <div key={index} className={`faq-item ${isOpen ? 'faq-item--open' : ''}`}>
+                <motion.div
+                  key={index}
+                  className={`faq-item ${isOpen ? 'faq-item--open' : ''}`}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                >
                   <button
                     type="button"
                     className="faq-item__button"
@@ -661,13 +690,25 @@ export default function HomePage() {
                     <span>{item.question}</span>
                     <span className="faq-item__toggle">{isOpen ? '−' : '+'}</span>
                   </button>
-                  {isOpen && <p className="faq-item__answer">{item.answer}</p>}
-                </div>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.p
+                        className="faq-item__answer"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.28, ease: 'easeOut' }}
+                      >
+                        {item.answer}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               );
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Contact Section */}
       <section className="contact-section" id="contact">
@@ -679,16 +720,41 @@ export default function HomePage() {
               Available for full-stack engineering roles, cross-platform app delivery, and remote technical consulting.
             </p>
 
-            <div className="contact-links">
-              <a href="mailto:muhammadarslan.dev@gmail.com">
-                <Mail size={18} /> muhammadarslan.dev@gmail.com
-              </a>
-              <a href="https://github.com" target="_blank" rel="noreferrer">
-                <Globe size={18} /> GitHub Profile
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer">
-                <Globe size={18} /> LinkedIn Profile
-              </a>
+            <div className="contact-card">
+              <div className="contact-card__intro">
+                <span className="section-eyebrow">CONTACT</span>
+                <h2 className="section-title">Let's discuss your project</h2>
+                <p className="contact-card__description">
+                  Available for full-stack engineering roles, cross-platform app delivery, and remote technical consulting.
+                </p>
+              </div>
+
+              <div className="contact-card__list">
+                <a href="tel:+923433604547" className="contact-card__item">
+                  <Phone size={18} />
+                  <span>0343 360 4547</span>
+                </a>
+                <a href="mailto:muhammadarslanm011@gmail.com" className="contact-card__item">
+                  <Mail size={18} />
+                  <span>muhammadarslanm011@gmail.com</span>
+                </a>
+                <a href="https://github.com/marslani" target="_blank" rel="noopener noreferrer" className="contact-card__item">
+                  <span className="contact-card__brand-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M12 0.5C5.648 0.5 0.5 5.648 0.5 12C0.5 17.094 3.792 21.346 8.207 22.855C8.807 22.96 9.04 22.602 9.04 22.284C9.04 22.004 9.028 21.293 9.023 20.343C5.832 20.918 5.146 18.54 5.146 18.54C4.682 17.185 3.958 16.775 3.958 16.775C2.942 16.086 4.033 16.101 4.033 16.101C5.148 16.184 5.728 17.252 5.728 17.252C6.712 18.968 8.265 18.454 8.869 18.168C8.973 17.454 9.261 16.977 9.578 16.692C7.053 16.404 4.385 15.362 4.385 10.832C4.385 9.6 4.838 8.58 5.583 7.78C5.462 7.492 5.06 6.293 5.702 4.753C5.702 4.753 6.672 4.44 8.998 6.02C9.922 5.784 10.908 5.667 11.894 5.662C12.88 5.667 13.867 5.784 14.792 6.02C17.12 4.44 18.089 4.753 18.089 4.753C18.733 6.293 18.33 7.492 18.21 7.78C18.957 8.58 19.405 9.6 19.405 10.832C19.405 15.375 16.732 16.4 14.204 16.685C14.68 17.06 15.107 17.803 15.107 18.898C15.107 20.493 15.092 21.756 15.092 22.285C15.092 22.607 15.323 22.969 15.933 22.854C20.346 21.344 23.5 17.095 23.5 12C23.5 5.648 18.352 0.5 12 0.5Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span>GitHub Profile</span>
+                </a>
+                <a href="https://www.linkedin.com/in/muhammmad-arslan/" target="_blank" rel="noopener noreferrer" className="contact-card__item">
+                  <span className="contact-card__brand-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M4.98 3.5C3.67 3.5 2.61 4.56 2.61 5.88C2.61 7.2 3.67 8.26 4.98 8.26C6.3 8.26 7.36 7.2 7.36 5.88C7.36 4.56 6.3 3.5 4.98 3.5ZM3.88 20.5H6.08V9.09H3.88V20.5ZM8.61 9.09V20.5H10.81V14.32C10.81 12.83 11.94 12.61 12.62 12.61C13.32 12.61 14.28 12.83 14.28 14.32V20.5H16.48V13.97C16.48 10.77 15.18 9.58 12.98 9.58C11.28 9.58 10.69 10.26 10.34 10.7H10.27V9.09H8.61Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span>LinkedIn Profile</span>
+                </a>
+              </div>
             </div>
           </div>
 
