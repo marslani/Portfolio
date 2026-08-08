@@ -546,29 +546,78 @@ export default function HomePage() {
         <div className="container-shell">
           <div className="section-header">
             <span className="section-eyebrow">EXPERIENCE</span>
-            <h2 className="section-title">Professional software history</h2>
+            <h2 className="section-title">Product-focused engineering experience shaped around real delivery work.</h2>
           </div>
 
           <div className="experience-list">
-            {experienceData.map((exp) => (
-              <div key={exp.title} className="experience-item">
-                <div className="experience-item__meta">{exp.period}</div>
-                <div className="experience-item__content">
-                  <div className="experience-item__heading">
-                    <Briefcase size={18} style={{ color: 'var(--color-blue)' }} />
-                    <h3>{exp.title}</h3>
-                  </div>
-                  <p className="experience-item__location">{exp.location}</p>
-                  <p>{exp.description}</p>
-                  <ul>
-                    {exp.highlights.map((h, i) => <li key={i}>{h}</li>)}
-                  </ul>
-                  <div className="experience-item__tags">
-                    {exp.stack.map((t) => <span key={t}>{t}</span>)}
-                  </div>
+            <div className="experience-item">
+              <div className="experience-item__meta">2023 — Present</div>
+              <div className="experience-item__content">
+                <div className="experience-item__heading">
+                  <h3>Freelance Full Stack Developer</h3>
+                </div>
+                <p className="experience-item__location">Remote · Lahore, Pakistan</p>
+                <p>
+                  Building product interfaces and platform logic for startups and small teams seeking web, mobile, and desktop delivery from a shared JavaScript skill set.
+                </p>
+                <ul>
+                  <li>Developed responsive web applications with React and Vite for product discovery and operational workflows.</li>
+                  <li>Built mobile features for recurring task flows, sync patterns, and cross-platform consistency in React Native projects.</li>
+                  <li>Designed desktop interfaces with Electron.js to support internal workflows and business operations.</li>
+                </ul>
+                <div className="experience-item__tags">
+                  {['React', 'Node.js', 'MongoDB', 'Express', 'React Native', 'Electron.js'].map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="experience-item">
+              <div className="experience-item__meta">2021 — 2023</div>
+              <div className="experience-item__content">
+                <div className="experience-item__heading">
+                  <h3>Independent Product Engineer</h3>
+                </div>
+                <p className="experience-item__location">Remote · Global Collaboration</p>
+                <p>
+                  Worked on feature delivery for client-facing products, focusing on front-end architecture, modular components, and API-backed workflows.
+                </p>
+                <ul>
+                  <li>Created maintainable UI systems and reusable component patterns to support product growth without repeated implementation work.</li>
+                  <li>Connected front-end product flows to REST APIs and MongoDB-backed data models for operational and customer-facing features.</li>
+                  <li>Improved development speed by clarifying architecture decisions and reducing handoff friction between design and delivery.</li>
+                </ul>
+                <div className="experience-item__tags">
+                  {['JavaScript', 'React', 'Express', 'MongoDB', 'Git', 'Vite'].map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="experience-item">
+              <div className="experience-item__meta">2019 — 2021</div>
+              <div className="experience-item__content">
+                <div className="experience-item__heading">
+                  <h3>Front-end Developer</h3>
+                </div>
+                <p className="experience-item__location">Hybrid / Remote Projects</p>
+                <p>
+                  Delivered interface work and product iteration for business tools, portfolio sites, and utility-driven applications with a strong focus on clarity and responsiveness.
+                </p>
+                <ul>
+                  <li>Built interface components and product screens tailored to business workflows and customer journeys.</li>
+                  <li>Handled front-end performance and accessibility improvements to support smoother interactions and code maintainability.</li>
+                  <li>Worked closely with product requirements to convert business needs into structured, testable UI features.</li>
+                </ul>
+                <div className="experience-item__tags">
+                  {['HTML5', 'CSS3', 'JavaScript', 'React', 'Git'].map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
