@@ -41,6 +41,15 @@ summary,
   outline: none;
 }
 
+body {
+  cursor: none;
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
 button::-moz-focus-inner {
   border: 0;
 }

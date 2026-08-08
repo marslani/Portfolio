@@ -28,42 +28,101 @@ import './HomePage.css';
 import { experienceData } from '../data/experienceData';
 
 /* Data Structures */
+
 const projectsData = [
   {
     id: 1,
-    title: 'Enterprise MERN Web Platform',
+    title: 'E-commerce Web Application',
     category: 'Web',
     accent: '#2563eb',
-    shortDescription: 'High-throughput web dashboard featuring real-time analytics, modular workflows, and unified API layer.',
-    problem: 'The client needed a responsive, performant dashboard capable of handling real-time state updates without heavy page reloads.',
-    approach: 'Engineered a modular React application using Vite, with optimized route-splitting and RESTful query caching.',
-    architecture: 'React (Vite) Single Page App → Express REST API → MongoDB Database System',
-    outcome: 'Improved rendering speeds by 45% and delivered a clean UI pattern across all screen viewports.',
-    stack: ['React', 'Node.js', 'Express', 'MongoDB']
+
+    shortDescription:
+      'Responsive React e-commerce application with product browsing, category-based navigation, shopping workflows, and a structured API-driven architecture.',
+
+    problem:
+      'The application required a responsive and user-friendly shopping experience with clear product discovery, reusable interface components, and reliable communication with backend services.',
+
+    approach:
+      'Developed the frontend with React using reusable components, structured application state, responsive layouts, API integration, and performance-conscious rendering patterns.',
+
+    architecture:
+      'React Application → REST API → Node.js / Express Backend → MongoDB',
+
+    outcome:
+      'Delivered a responsive e-commerce experience with a maintainable component structure, reusable UI patterns, and a consistent experience across desktop, tablet, and mobile devices.',
+
+    stack: [
+      'React',
+      'JavaScript',
+      'Node.js',
+      'Express.js',
+      'MongoDB',
+      'REST API',
+      'CSS'
+    ]
   },
+
   {
     id: 2,
-    title: 'Cross-Platform Mobile App',
+    title: 'Cross-Platform Mobile Application',
     category: 'Mobile',
-    accent: '#8b5cf6',
-    shortDescription: 'Unified mobile client for iOS and Android providing real-time data sync and offline support.',
-    problem: 'Duplicate codebases for iOS and Android led to inconsistent feature parity and high maintenance overhead.',
-    approach: 'Built a shared React Native codebase with customized platform primitives and efficient native bridges.',
-    architecture: 'React Native Shared Client → Centralized Data Sync Layer → Express API',
-    outcome: 'Reduced release cycles by 50% while guaranteeing feature parity across both mobile operating systems.',
-    stack: ['React Native', 'JavaScript', 'REST API', 'Redux']
+    accent: '#7c3aed',
+
+    shortDescription:
+      'React Native mobile application designed for Android and iOS with reusable components, API integration, and a consistent cross-platform experience.',
+
+    problem:
+      'The application required a single mobile codebase that could provide a consistent user experience across Android and iOS while keeping the codebase maintainable.',
+
+    approach:
+      'Built the application with React Native using reusable components, structured navigation, API integration, application state management, and platform-aware UI patterns.',
+
+    architecture:
+      'React Native Application → API Layer → Backend Services → Database',
+
+    outcome:
+      'Created a maintainable cross-platform mobile application with shared functionality and a consistent interface across supported mobile platforms.',
+
+    stack: [
+      'React Native',
+      'JavaScript',
+      'Redux',
+      'REST API',
+      'Android',
+      'iOS'
+    ]
   },
+
   {
     id: 3,
-    title: 'Desktop Workflow Suite',
+    title: 'Cross-Platform Desktop Software',
     category: 'Desktop',
     accent: '#059669',
-    shortDescription: 'Cross-platform desktop tool designed for local file processing and secure system operations.',
-    problem: 'Users required offline-first processing power with direct access to local system resources.',
-    approach: 'Leveraged Electron.js with isolated IPC channels connecting the renderer interface with system processes.',
-    architecture: 'Electron Main Process ← IPC Bridge → React Renderer UI',
-    outcome: 'Shipped a lightweight desktop app operating seamlessly on Windows, macOS, and Linux.',
-    stack: ['Electron.js', 'React', 'Node.js IPC', 'HTML5/CSS3']
+
+    shortDescription:
+      'Electron.js desktop application combining a React interface with Node.js capabilities for cross-platform desktop workflows.',
+
+    problem:
+      'The software required a desktop environment capable of combining a modern web-based interface with access to desktop-level functionality.',
+
+    approach:
+      'Developed the desktop application with Electron.js and React, using the Electron main process and secure IPC communication to connect the interface with desktop functionality.',
+
+    architecture:
+      'Electron Main Process ↔ Secure IPC Layer ↔ React Renderer',
+
+    outcome:
+      'Built a cross-platform desktop application architecture suitable for Windows, macOS, and Linux environments while maintaining a reusable React-based interface.',
+
+    stack: [
+      'Electron.js',
+      'React',
+      'Node.js',
+      'JavaScript',
+      'IPC',
+      'HTML5',
+      'CSS3'
+    ]
   }
 ];
 
@@ -286,17 +345,21 @@ export default function HomePage() {
         <div className="container-shell">
           <div className="section-header">
             <span className="section-eyebrow">ABOUT</span>
-            <h2 className="section-title">Engineering clarity across the full stack</h2>
+            <h2 className="section-title">A concise story about how I build products</h2>
+            <p className="section-copy">
+              I blend clean interface architecture, cross-platform engineering, and practical product thinking to ship reliable software for clients and teams.
+            </p>
           </div>
 
           <div className="about-grid">
             <motion.div
               className="about-main-card"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, ease: 'easeOut' }}
             >
-              <div>
+              <div className="about-main-card__header">
                 <div className="about-main-card__badge">
                   <Sparkles size={16} />
                   <span>Full Stack Developer</span>
@@ -310,40 +373,40 @@ export default function HomePage() {
               </div>
 
               <div className="about-highlights-pills">
-                <span className="about-pill"><CheckCircle2 size={14} /> Modular Engineering</span>
-                <span className="about-pill"><CheckCircle2 size={14} /> Cross-Platform Parity</span>
-                <span className="about-pill"><CheckCircle2 size={14} /> Async Communication</span>
+                <span className="about-pill"><CheckCircle2 size={14} /> Modular engineering</span>
+                <span className="about-pill"><CheckCircle2 size={14} /> Cross-platform parity</span>
+                <span className="about-pill"><CheckCircle2 size={14} /> Async collaboration</span>
               </div>
             </motion.div>
 
             <div className="about-cards-column">
-              <motion.div className="about-feature-card" whileHover={{ y: -4 }}>
+              <motion.div className="about-feature-card" whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 280, damping: 22 }}>
                 <div className="about-feature-card__icon about-feature-card__icon--web">
                   <Globe size={22} />
                 </div>
                 <div>
                   <h4>Web (React / Vite)</h4>
-                  <p>Fast, single-page web applications built with clean component state and responsive layouts.</p>
+                  <p>Fast, single-page web apps built with clean component state and responsive layouts.</p>
                 </div>
               </motion.div>
 
-              <motion.div className="about-feature-card" whileHover={{ y: -4 }}>
+              <motion.div className="about-feature-card" whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 280, damping: 22 }}>
                 <div className="about-feature-card__icon about-feature-card__icon--mobile">
                   <Smartphone size={22} />
                 </div>
                 <div>
                   <h4>Mobile (React Native)</h4>
-                  <p>Native iOS and Android client applications delivered from a single JavaScript codebase.</p>
+                  <p>Native iOS and Android clients from a single codebase with consistent UX across platforms.</p>
                 </div>
               </motion.div>
 
-              <motion.div className="about-feature-card" whileHover={{ y: -4 }}>
+              <motion.div className="about-feature-card" whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 280, damping: 22 }}>
                 <div className="about-feature-card__icon about-feature-card__icon--desktop">
                   <Monitor size={22} />
                 </div>
                 <div>
                   <h4>Desktop (Electron.js)</h4>
-                  <p>Cross-platform desktop tools with native operating system integrations and local file access.</p>
+                  <p>Cross-platform desktop tools with native integrations and robust local system capabilities.</p>
                 </div>
               </motion.div>
             </div>
@@ -552,7 +615,11 @@ export default function HomePage() {
         <div className="container-shell">
           <div className="section-header">
             <span className="section-eyebrow">EXPERIENCE</span>
-            <h2 className="section-title">Product-focused engineering experience shaped around real delivery work.</h2>
+<h2 className="section-title">
+  Real-world projects. Practical engineering.
+</h2>
+
+
           </div>
 
           <div className="experience-list">

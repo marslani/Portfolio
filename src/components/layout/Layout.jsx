@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
+import AnimatedCursor from '../common/AnimatedCursor';
 import './Layout.css';
 
 export default function Layout() {
@@ -11,6 +12,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <AnimatedCursor />
     </div>
   );
 }
