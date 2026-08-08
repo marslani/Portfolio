@@ -695,9 +695,14 @@ export default function HomePage() {
           <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
             <motion.div
               className="modal-card"
-              initial={{ opacity: 0, y: 28, scale: 0.96, rotate: -1 }}
-              animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-              exit={{ opacity: 0, y: 28, scale: 0.96, rotate: -1 }}
+              variants={{
+                hidden: { opacity: 0, y: 24, scale: 0.98, rotate: -0.8 },
+                visible: { opacity: 1, y: 0, scale: 1, rotate: 0 },
+                exit: { opacity: 0, y: 24, scale: 0.98, rotate: -0.8 }
+              }}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               transition={{ type: 'spring', stiffness: 320, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -708,28 +713,44 @@ export default function HomePage() {
                 </button>
               </div>
 
-              <div className="case-study-modal">
-                <p className="case-study-modal__summary">{selectedProject.shortDescription}</p>
-                <div className="case-study-modal__group">
+              <motion.div className="case-study-modal" initial="hidden" animate="visible" exit="hidden"
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } }
+                }}
+              >
+                <motion.p className="case-study-modal__summary" variants={{ hidden: { opacity: 0, y: 6 }, visible: { opacity: 1, y: 0 } }}>
+                  {selectedProject.shortDescription}
+                </motion.p>
+
+                <motion.div className="case-study-modal__group" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
                   <h4>Problem Statement</h4>
                   <p>{selectedProject.problem}</p>
-                </div>
-                <div className="case-study-modal__group">
+                </motion.div>
+
+                <motion.div className="case-study-modal__group" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
                   <h4>Engineering Approach</h4>
                   <p>{selectedProject.approach}</p>
-                </div>
-                <div className="case-study-modal__group">
+                </motion.div>
+
+                <motion.div className="case-study-modal__group" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
                   <h4>System Architecture</h4>
                   <p>{selectedProject.architecture}</p>
-                </div>
-                <div className="case-study-modal__group">
+                </motion.div>
+
+                <motion.div className="case-study-modal__group" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
                   <h4>Key Outcome</h4>
                   <p>{selectedProject.outcome}</p>
-                </div>
-                <div className="case-study-modal__tags">
+                </motion.div>
+
+                <motion.div className="case-study-modal__tags" variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}>
                   {selectedProject.stack.map((s) => <span key={s}>{s}</span>)}
+                </motion.div>
+
+                <div className="modal-scroll-hint" aria-hidden="true">
+                  <ArrowDown size={16} />
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         )}
