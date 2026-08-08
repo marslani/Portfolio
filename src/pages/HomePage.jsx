@@ -788,13 +788,6 @@ export default function HomePage() {
             </p>
 
             <div className="contact-card">
-              <div className="contact-card__intro">
-                <span className="section-eyebrow">CONTACT</span>
-                <h2 className="section-title">Let's discuss your project</h2>
-                <p className="contact-card__description">
-                  Available for full-stack engineering roles, cross-platform app delivery, and remote technical consulting.
-                </p>
-              </div>
 
               <div className="contact-card__list">
                 <a href="tel:+923433604547" className="contact-card__item">
