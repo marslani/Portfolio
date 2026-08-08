@@ -14,6 +14,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Reserve space for the fixed/sticky header to avoid overlapping content */
+  padding-top: var(--site-header-height, 4.5rem);
 }
 
 * {

@@ -3,6 +3,8 @@
    ========================================================================== */
 
 :root {
+  /* Expose header height so JS/CSS can align content reliably */
+  --site-header-height: 4.5rem;
   --pro-emerald: #00ffcc;
   --pro-emerald-glow: rgba(0, 255, 204, 0.45);
   --pro-teal: #06b6d4;
