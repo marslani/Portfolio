@@ -17,6 +17,7 @@ import {
   Users,
   Smartphone,
   Monitor,
+  X,
   Cpu,
   Server,
   Layers
@@ -83,6 +84,27 @@ const skillsData = [
       { name: 'React Native', level: 'Proficient', value: 88 },
       { name: 'Electron.js', level: 'Proficient', value: 85 },
       { name: 'Cross-Platform UI/UX', level: 'Advanced', value: 90 }
+    ]
+  },
+  {
+    title: 'Desktop',
+    description: 'Desktop workflows with a strong shared JS foundation.',
+    icon: Monitor,
+    skills: [
+      { name: 'Electron.js', level: 'Proficient', value: 82 },
+      { name: 'Main/renderer patterns', level: 'Proficient', value: 78 },
+      { name: 'Desktop UX', level: 'Working Knowledge', value: 72 }
+    ]
+  },
+  {
+    title: 'Tooling & Deployment',
+    description: 'Reliable release and delivery workflows.',
+    icon: Layers,
+    skills: [
+      { name: 'Git & GitHub', level: 'Advanced', value: 92 },
+      { name: 'Vercel', level: 'Proficient', value: 82 },
+      { name: 'Netlify', level: 'Proficient', value: 78 },
+      { name: 'Railway', level: 'Working Knowledge', value: 70 }
     ]
   },
   {
@@ -673,14 +695,17 @@ export default function HomePage() {
           <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
             <motion.div
               className="modal-card"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, y: 28, scale: 0.96, rotate: -1 }}
+              animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, y: 28, scale: 0.96, rotate: -1 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="modal-header">
                 <h3 style={{ fontSize: '1.4rem', fontWeight: 700 }}>{selectedProject.title}</h3>
-                <button className="modal-close" onClick={() => setSelectedProject(null)}>&times;</button>
+                <button className="modal-close" onClick={() => setSelectedProject(null)} aria-label="Close">
+                  <X size={18} />
+                </button>
               </div>
 
               <div className="case-study-modal">
