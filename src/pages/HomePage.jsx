@@ -26,6 +26,7 @@ import {
 
 import './HomePage.css';
 import { experienceData } from '../data/experienceData';
+import resumeFile from '../assets/cv/Arslan Resume.png';
 
 /* Data Structures */
 
@@ -306,8 +307,13 @@ export default function HomePage() {
               <a href="#projects" className="btn btn--primary">
                 View Projects <ArrowRight size={18} />
               </a>
-              <a href="#contact" className="btn btn--secondary">
-                <Download size={18} /> Download Resume
+              <a
+                href={resumeFile}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn--secondary"
+              >
+                <Download size={18} /> View Resume
               </a>
             </div>
           </motion.div>
@@ -715,7 +721,14 @@ export default function HomePage() {
                 Download a clean, one-page summary of technical projects, software engineering capabilities, and architectural practices.
               </p>
             </div>
-            <a href="#contact" className="btn btn--primary" style={{ whiteSpace: 'nowrap' }}>
+            <a
+              href={resumeFile}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn--primary"
+              style={{ whiteSpace: 'nowrap' }}
+              download="Arslan Resume.png"
+            >
               <Download size={18} /> Download PDF Resume
             </a>
           </div>
