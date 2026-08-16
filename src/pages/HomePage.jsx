@@ -26,7 +26,7 @@ import {
 
 import './HomePage.css';
 import { experienceData } from '../data/experienceData';
-import resumeFile from '../assets/cv/Arslan Resume.png';
+import resumeFile from '../assets/cv/Muhammad_Arslan_Resume.pdf';
 
 /* Data Structures */
 
@@ -727,9 +727,9 @@ export default function HomePage() {
               rel="noreferrer"
               className="btn btn--primary"
               style={{ whiteSpace: 'nowrap' }}
-              download="Arslan Resume.png"
+              download="Muhammad_Arslan_Resume.pdf"
             >
-              <Download size={18} /> Download PDF Resume
+              <Download size={18} /> Download Resume
             </a>
           </div>
         </div>
